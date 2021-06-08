@@ -1,4 +1,4 @@
-build_qemu_img:
+build_qemu_img_uml:
 	docker run --rm --interactive --tty \
 		--user $(shell id -u) --workdir /recipes \
 		--mount "type=bind,source=$(shell pwd),destination=/recipes" \
@@ -6,6 +6,16 @@ build_qemu_img:
 		--security-opt label=disable godebos/debos \
 		--print-recipe \
 		--fakemachine-backend=uml \
+		uml.yaml
+
+build_qemu_img_kvm:
+	docker run --rm --interactive --tty --device /dev/kvm \
+		--user $(shell id -u) --workdir /recipes \
+		--mount "type=bind,source=$(shell pwd),destination=/recipes" \
+		--mount "type=bind,source=/dev/shm,destination=/dev/shm" \
+		--security-opt label=disable godebos/debos \
+		--print-recipe \
+		--fakemachine-backend=kvm \
 		uml.yaml
 
 run_qemu_img:
